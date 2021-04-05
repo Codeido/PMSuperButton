@@ -93,7 +93,19 @@ open class PMSuperButton: UIButton {
         
         self.layer.insertSublayer(gradient, below: self.imageView?.layer)
     }
-    
+    //MARK:- Haptic Feedback
+    @IBInspectable open var hasHapticFeedback:Bool = false {
+        didSet{
+            // No preSets
+        }
+    }
+    // HapticFeedback Method
+    func hapticFeedback() {
+        if #available(iOSApplicationExtension 10.0, *) {
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
+        }
+    }
     //MARK: - Animations
     @IBInspectable open var animatedScaleWhenHighlighted: CGFloat = 1.0
     @IBInspectable open var animatedScaleDurationWhenHighlighted: Double = 0.2
@@ -186,6 +198,9 @@ open class PMSuperButton: UIButton {
     
     @objc func tapped(sender: PMSuperButton) {
         self.action?()
+        if hasHapticFeedback {
+            self.hapticFeedback()
+        }
     }
     
     //MARK: - Loading
@@ -237,7 +252,7 @@ open class PMSuperButton: UIButton {
     
     override open func prepareForInterfaceBuilder() {
     }
-
+    
 }
 
 extension PMSuperButton: CAAnimationDelegate{
